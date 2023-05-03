@@ -1,3 +1,29 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+
+<div class="jumbotron">
+    <h1>Welcome to iTunesManager<br /><br /></h1>
+    <p class="lead">Search for your favorite artist</p>
+    <form action="@Url.Action("Search", "Home")" method="get">
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" name="Term" placeholder="Search Artist...">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span> Search</button>
+            </span>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Search Counts</h2>
+        @*<ul>
+            @foreach (var item in ViewBag.SearchCounts)
+            {
+                <li>@item.Term - @item.Count</li>
+            }
+        </ul>*@
+        <p><a class="btn btn-default" href="@Url.Action("Counts", "Home")" role="button">View all &raquo;</a></p>
+    </div>
+</div>

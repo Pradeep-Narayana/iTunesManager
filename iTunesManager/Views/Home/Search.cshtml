@@ -1,19 +1,75 @@
 ﻿@model List<iTunesManager.Models.SearchResultModel>
-
 @{
     ViewBag.Title = "Search";
 }
 
-<h2>Search</h2>
+<h2>Search Results <br /><br /></h2>
 
-@foreach (var result in Model)
-{
-    <div>
-        <h3>@result.TrackName</h3>
-        <p>@result.ArtistName</p>
-        <p>@result.TrackViewUrl</p>
-    </div>
-}
+@*@foreach (var result in Model)
+    {
+        <div>
+            <h3>@result.TrackName</h3>
+            <p>@result.ArtistName</p>
+            <p>@result.TrackViewUrl</p>
+        </div>
+    }*@
+
+@*@{
+        ViewBag.Title = "Search";
+    }*@
 
 
+<div class="row">
+    @foreach (var result in Model)
+    {
+        if (result.WrapperType == "track" || result.WrapperType == "artist")
+        {
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>@result.ArtistName - @result.TrackName</h4>
+                    </div>
+                    <div class="panel-body">
+                        <img src="@result.ArtworkUrl100" alt="@result.TrackName" class="img-responsive" />
+                    </div>
+                    <ul class="list-group">
+                        @if (result.WrapperType == "track")
+                        {
+                            <li class="list-group-item">
+                                <a href="@result.ArtistViewUrl">View Artist</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="@result.CollectionViewUrl">View Collection</a>
+                            </li>
+                            <li class="list-group-item">
+                                Track Price: @result.TrackPrice
+                            </li>
+                            <li class="list-group-item">
+                                Release Date: @DateTime.Parse(result.ReleaseDate).ToString("yyyy-MM-dd")
+                            </li>
+                            <li class="list-group-item">
+                                Country: @result.Country
+                            </li>
+                            <li class="list-group-item">
+                                Genre: @result.PrimaryGenreName
+                            </li>
+                        }
+                        else if (result.WrapperType == "artist")
+                        {
+                            <li class="list-group-item">
+                                <a href="@result.ArtistViewUrl">Artist View</a>
+                            </li>
+                            <li class="list-group-item">
+                                Country: @result.Country
+                            </li>
+                            <li class="list-group-item">
+                                Genre: @result.PrimaryGenreName
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    }
+</div>
 

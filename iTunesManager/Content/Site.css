@@ -22,3 +22,17 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.col-md-4 {
+    width: 300px;
+    height: 500px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    margin: 10px;
+    vertical-align: top;
+    text-align: center;
+}
+
+.col-md-4:hover {
+    background-color: lightblue;
+}

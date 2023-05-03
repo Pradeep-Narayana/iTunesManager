@@ -1,0 +1,19 @@
+﻿@model List<iTunesManager.Models.SearchResultModel>
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search</h2>
+
+@foreach (var result in Model)
+{
+    <div>
+        <h3>@result.TrackName</h3>
+        <p>@result.ArtistName</p>
+        <p>@result.TrackViewUrl</p>
+    </div>
+}
+
+
+

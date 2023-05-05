@@ -22,10 +22,9 @@ select,
 textarea {
     max-width: 280px;
 }
-
 .col-md-4 {
     width: 300px;
-    height: 500px;
+    height: 530px;
     border: 1px solid #ccc;
     display: inline-block;
     margin: 10px;
@@ -35,4 +34,11 @@ textarea {
 
 .col-md-4:hover {
     background-color: lightblue;
+}
+
+.btn-play {
+    position: absolute;
+    top: 25%;
+    right: 10%;
+    transform: translate(-50%, -50%);
 }

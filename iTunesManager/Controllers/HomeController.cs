@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Net;
-using System.IO;
+﻿using iTunesManager.Models;
 using Newtonsoft.Json;
-using iTunesManager.Models;
+using System;
+using System.Linq;
 using System.Net.Http;
+using System.Web.Mvc;
 
 namespace iTunesManager.Controllers
 {
@@ -34,32 +30,31 @@ namespace iTunesManager.Controllers
 
         public ActionResult Search(string term)
         {
-            //ViewBag.Message = "Your Search page.";
-
-            //return View();
-            //try
-            //{
-            //    //var result = RedirectToAction("Search", "SearchController", new { term = Term});
-
-            //ViewBag.value = Term;
-            //return View(result);
             try
             {
-                var url = "https://itunes.apple.com/search?term=" + term;
-                var client = new HttpClient();
-                var response = client.GetAsync(url).Result;
-                response.EnsureSuccessStatusCode();
-
-                var jsonString = response.Content.ReadAsStringAsync().Result;
-                var searchResults = JsonConvert.DeserializeObject<SearchResultModel>(jsonString);
-
                 ViewBag.value = term;
+                SearchResultModel searchResults = CacheController.RetrieveFromCache(term);
+
+                if (searchResults == null)
+                {
+                    // Data not found in cache, retrieve from API
+                    var url = "https://itunes.apple.com/search?term=" + term;
+                    var client = new HttpClient();
+                    var response = client.GetAsync(url).Result;
+                    response.EnsureSuccessStatusCode();
+
+                    var jsonString = response.Content.ReadAsStringAsync().Result;
+                    searchResults = JsonConvert.DeserializeObject<SearchResultModel>(jsonString);
+
+                    // Insert data to cache
+                    CacheController.InsertIntoCache(searchResults, term);
+                }
                 return View(searchResults.Results.ToList());
             }
             catch (Exception ex)
-                {
-                    throw ex;
-                }
+            {
+                throw ex;
             }
+        }
     }
 }

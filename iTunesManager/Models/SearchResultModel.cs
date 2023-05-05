@@ -14,7 +14,9 @@ namespace iTunesManager.Models
 
         public string WrapperType { get; set; }
         public string ArtworkUrl100 { get; set; }
+        public string ArtworkUrl30 { get; set; }
         public string ArtistViewUrl { get; set; }
+        public string PreviewUrl { get; set; }
         public string CollectionViewUrl { get; set; }
         public string TrackPrice { get; set; }
         public string ReleaseDate { get; set; }

@@ -147,4 +147,3 @@ C:\personal\Pradeep\OneDrive - sjsu.edu\Interview Prep\Company interviews\ReachM
 C:\personal\Pradeep\OneDrive - sjsu.edu\Interview Prep\Company interviews\ReachMobi\iTunesManager\iTunesManager\iTunesManager\obj\Debug\iTunesManager.csproj.CopyComplete
 C:\personal\Pradeep\OneDrive - sjsu.edu\Interview Prep\Company interviews\ReachMobi\iTunesManager\iTunesManager\iTunesManager\obj\Debug\iTunesManager.dll
 C:\personal\Pradeep\OneDrive - sjsu.edu\Interview Prep\Company interviews\ReachMobi\iTunesManager\iTunesManager\iTunesManager\obj\Debug\iTunesManager.pdb
-C:\personal\Pradeep\OneDrive - sjsu.edu\Interview Prep\Company interviews\ReachMobi\iTunesManager\iTunesManager\iTunesManager\obj\Debug\iTunesManager.csproj.AssemblyReference.cache

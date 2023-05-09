@@ -14,58 +14,24 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Data;
 using System.Data.Entity;
+using System.Threading;
 
 namespace iTunesManager.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly SqliteConnection sqliteConnection;
-        //private SqliteDbContext dbContext;
         private SqlConnection con;
         private iTunesManagerDbContext dbContext;
-        //public HomeController()
-        //{
-
-        //    // Create a connection to the database
-        //    //string connectionString = "Data Source=iTunesManagerDb.db";
-        //    //try
-        //    //{
-        //    //    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-        //    //    {
-        //    //        connection.Open();
-        //    //        Console.WriteLine("Connection successful");
-
-        //    //    }
-        //    //}
-        //    //catch(Exception ex)
-        //    //{
-        //    //    Console.WriteLine("Connection failed :"+ex.Message);
-        //    //}
-
-        //}
-
-        private void InitializeDb()
-        {
-            dbContext = new iTunesManagerDbContext();
-
-            //var clicks = new List<ClickCountModel>
-            //    {
-            //        new ClickCountModel { ArtistName = "Artist1", TrackName = "Track1", ClickCount = 5 },
-            //        new ClickCountModel { ArtistName = "Artist2", TrackName = "Track2", ClickCount = 3 },
-            //        new ClickCountModel { ArtistName = "Artist3", TrackName = "Track3", ClickCount = 8 },
-            //        new ClickCountModel { ArtistName = "Artist4", TrackName = "Track4", ClickCount = 10 }
-            //    };
-
-            //foreach (var click in clicks)
-            //{
-            //    dbContext.ClickCountModels.Add(click);
-            //}
-
-            //dbContext.SaveChanges();
-        }
         public ActionResult Index()
         {
-            return View();
+            List<RecentAccessModel> recentAccessItems = new List<RecentAccessModel>();
+            // Retrieve the top 10 items from the RecentAccessModel table
+            using (var dbContext = new iTunesManagerDbContext())
+            {
+                recentAccessItems = dbContext.RecentAccessModels.Take(10).ToList();
+            }               
+            // Pass the view model to the view
+            return View(recentAccessItems);
         }
 
         public ActionResult About()
@@ -99,15 +65,9 @@ namespace iTunesManager.Controllers
                     var jsonString = response.Content.ReadAsStringAsync().Result;
                     var jsonObject = JObject.Parse(jsonString);
                     searchResultsList = jsonObject["results"].ToObject<List<SearchResultModel>>();
-
-                    //foreach (var result in searchResultsList)
-                    //{
-                    //    result.ClickCount = 0;
-                    //}
-                    // Insert into cache
                     CacheController.InsertIntoCache(searchResultsList, term);
                 }
-                //UpdateClickCount(searchResultsList, term);
+                UpdateRecentAccessed(term);
                 return View(searchResultsList);
             }
             catch (Exception ex)
@@ -116,13 +76,41 @@ namespace iTunesManager.Controllers
             }
         }
 
+        private async Task UpdateRecentAccessed(string term)
+        {
+            using (var dbContext = new iTunesManagerDbContext())
+            {
+                // Retrieve the ClickCountModel object with the given artist and track names
+                var recentAccessed = await dbContext.RecentAccessModels
+                    .Where(c => c.ArtistName == term).FirstOrDefaultAsync();
+
+                // Increment the click count
+                if (recentAccessed == null)
+                {
+                    // No record found, create a new one
+                    recentAccessed = new RecentAccessModel
+                    {
+                        ArtistName = term,
+                        AccessTime = DateTime.Now
+                    };
+                    dbContext.RecentAccessModels.Add(recentAccessed);
+                }
+                else
+                {
+                    // Record found, increment the click count
+                    recentAccessed.AccessTime = DateTime.Now;
+                }
+                // Save changes to the database
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
         public ActionResult ClickCounts()
         {
-            //InitializeDb();
             List<ClickCountModel> clickCounts = new List<ClickCountModel>();
             using (var dbContext = new iTunesManagerDbContext())
             {
-                clickCounts = dbContext.ClickCountModels.ToList();
+                clickCounts = dbContext.ClickCountModels.OrderByDescending(x=>x.ClickCount).ToList();
             }
             return View(clickCounts);            
         }
@@ -130,6 +118,7 @@ namespace iTunesManager.Controllers
         [HttpPost]
         public async Task UpdateClickCount(string artistName, string trackName, string url)
         {
+            Thread.Sleep(2000);
             using (var dbContext = new iTunesManagerDbContext())
             {
                 // Retrieve the ClickCountModel object with the given artist and track names

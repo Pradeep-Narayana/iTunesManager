@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<iTunesManager.Models.RecentAccessModel>
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -15,13 +16,43 @@
     </form>
 </div>
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>Search Counts</h2>
-        <div class="col-md-6">
-            <div class="pull-right">
-                <a href="@Url.Action("ClickCounts", "Home")" class="btn btn-primary">View Click Counts</a>
+@*<div class="row">
+        <div class="col-md-3">
+            <h2>Search Counts</h2>
+            <div class="col-md-6">
+                <div class="pull-right">
+                    <a href="@Url.Action("ClickCounts", "Home")" class="btn btn-primary">View Click Counts</a>
+                </div>
             </div>
         </div>
+    </div>*@
+
+<h2>Recently Searched</h2>
+@if (Model == null || Model.Count == 0)
+{
+    <p>No records found.</p>
+}
+else
+{
+    <div style="width: 300px; overflow-x: auto;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Artist Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderByDescending(x=>x.AccessTime))
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("Search", "Home", new { term = item.ArtistName })">@item.ArtistName</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-</div>
+
+}
+

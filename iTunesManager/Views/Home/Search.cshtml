@@ -15,7 +15,8 @@
                     <div class="panel-heading">
                         <h4 style="overflow: hidden; display: -webkit-box;-webkit-line-clamp: 2; -webkit-box-orient: vertical;min-height:40px"
                             title="@result.ArtistName - @result.TrackName">
-                            @result.ArtistName - @result.TrackName</h4>
+                            @result.ArtistName - @result.TrackName
+                        </h4>
                     </div>
                     <div class="panel-body">
                         <img src="@result.ArtworkUrl100" alt="@result.TrackName" class="img-responsive" />
@@ -30,16 +31,25 @@
                         @if (result.WrapperType == "track")
                         {
                             <li class="list-group-item">
-                                <a href="@result.ArtistViewUrl">View Artist</a>
+                                <a href="@result.ArtistViewUrl?" onclick="updateClickCount('@result.ArtistName', '@result.TrackName');">View Artist</a>
                             </li>
                             <li class="list-group-item">
-                                <a href="@result.CollectionViewUrl">View Collection</a>
+                                <a href="@result.TrackViewUrl?" onclick="updateClickCount('@result.ArtistName', '@result.TrackName');">View Tracks</a>
                             </li>
+                            @*<li class="list-group-item">
+                                <a href="@result.CollectionViewUrl?source=track" onclick="updateClickCount('@result.ArtistName', '@result.TrackName');">View Tracks</a>
+                            </li>*@
+                            <!--<a href="@result.ArtistViewUrl" onclick="updateClickCount('@result.ArtistName', '@result.TrackName')">Artist View</a>
+        <br />-->
+                            @*<a href="@result.CollectionViewUrl" onclick="updateClickCount('@result.ArtistName', '@result.TrackName')">Collection View</a><br />*@
+                            <!--<a href="@result.TrackViewUrl" onclick="updateClickCount('@result.ArtistName', '@result.TrackName')">Track View</a>
+        <br />-->
+
                             <li class="list-group-item">
                                 Track Price: @result.TrackPrice
                             </li>
                             <li class="list-group-item">
-                                Release Date: @DateTime.Parse(result.ReleaseDate).ToString("yyyy-MM-dd")
+                                Release Date: @(DateTime.TryParse(result.ReleaseDate, out DateTime releaseDate) ? releaseDate.ToString("yyyy-MM-dd") : "")
                             </li>
                             <li class="list-group-item">
                                 Country: @result.Country
@@ -66,4 +76,26 @@
         }
     }
 </div>
+<script>
+function updateClickCount(artistName, trackName) {
+    $.ajax({
+        url: "@Url.Action("UpdateClickCount", "Home")",
+        data: {
+            artistName: artistName,
+            trackName: trackName
+        },
+        type: "POST",
+        success: function(result) {
+            console.log(result);
+            window.location.href = event.target.href;
+        },
+        error: function(xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+    });
+    return false;
+}
+</script>
+
+
 

@@ -7,11 +7,10 @@ namespace iTunesManager.Models
 {
     public class SearchResultModel
     {
+        public int TrackId { get; set; }
         public string ArtistName { get; set; }
         public string TrackName { get; set; }
         public string TrackViewUrl { get; set; }
-        public List<SearchResultModel> Results { get; set; }
-
         public string WrapperType { get; set; }
         public string ArtworkUrl100 { get; set; }
         public string ArtworkUrl30 { get; set; }
@@ -22,6 +21,6 @@ namespace iTunesManager.Models
         public string ReleaseDate { get; set; }
         public string Country { get; set; }
         public string PrimaryGenreName { get; set; }
-
+        public int ClickCount { get; set; }
     }
 }

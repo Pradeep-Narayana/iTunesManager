@@ -18,12 +18,10 @@
 <div class="row">
     <div class="col-md-3">
         <h2>Search Counts</h2>
-        @*<ul>
-            @foreach (var item in ViewBag.SearchCounts)
-            {
-                <li>@item.Term - @item.Count</li>
-            }
-        </ul>*@
-        <p><a class="btn btn-default" href="@Url.Action("Counts", "Home")" role="button">View all &raquo;</a></p>
+        <div class="col-md-6">
+            <div class="pull-right">
+                <a href="@Url.Action("ClickCounts", "Home")" class="btn btn-primary">View Click Counts</a>
+            </div>
+        </div>
     </div>
 </div>

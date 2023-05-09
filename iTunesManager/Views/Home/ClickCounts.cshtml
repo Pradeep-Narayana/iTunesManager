@@ -1,0 +1,26 @@
+﻿@model List<iTunesManager.Models.ClickCountModel>
+@{
+    ViewBag.Title = "ClickCounts";
+}
+
+<h2>Click Counts</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Artist Name</th>
+            <th>Track Name</th>
+            <th>Click Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ArtistName</td>
+                <td>@item.TrackName</td>
+                <td>@item.ClickCount</td>
+            </tr>
+        }
+    </tbody>
+</table>

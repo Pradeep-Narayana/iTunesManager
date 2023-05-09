@@ -4,11 +4,16 @@
 }
 
 <h2>Search Results for "@ViewBag.Value"<br /><br /></h2>
-
+@if (Model == null || Model.Count == 0)
+{
+    <p>No records found.</p>
+}
+else
+{
 <div class="row">
     @foreach (var result in Model)
     {
-        if ((result.WrapperType == "track" || result.WrapperType == "artist") /*&& ViewBag.value == result.ArtistName*/)
+        if ((result.WrapperType == "track" || result.WrapperType == "artist"))
         {
             <div class="col-md-4">
                 <div class="panel panel-default">
@@ -36,14 +41,6 @@
                             <li class="list-group-item">
                                 <a href="@result.TrackViewUrl?" onclick="updateClickCount('@result.ArtistName', '@result.TrackName');">View Tracks</a>
                             </li>
-                            @*<li class="list-group-item">
-                                <a href="@result.CollectionViewUrl?source=track" onclick="updateClickCount('@result.ArtistName', '@result.TrackName');">View Tracks</a>
-                            </li>*@
-                            <!--<a href="@result.ArtistViewUrl" onclick="updateClickCount('@result.ArtistName', '@result.TrackName')">Artist View</a>
-        <br />-->
-                            @*<a href="@result.CollectionViewUrl" onclick="updateClickCount('@result.ArtistName', '@result.TrackName')">Collection View</a><br />*@
-                            <!--<a href="@result.TrackViewUrl" onclick="updateClickCount('@result.ArtistName', '@result.TrackName')">Track View</a>
-        <br />-->
 
                             <li class="list-group-item">
                                 Track Price: @result.TrackPrice
@@ -96,6 +93,6 @@ function updateClickCount(artistName, trackName) {
     return false;
 }
 </script>
-
+}
 
 

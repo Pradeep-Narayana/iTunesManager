@@ -1,27 +1,20 @@
-﻿using iTunesManager.Models;
-using Newtonsoft.Json;
+﻿using iTunesManager.Data;
+using iTunesManager.Models;
 using Newtonsoft.Json.Linq;
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Web.Mvc;
-using System.Data.SqlClient;
-using System.Data.SQLite;
-using Microsoft.Data.Sqlite;
-using iTunesManager.Data;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Data;
 using System.Data.Entity;
+using System.Linq;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace iTunesManager.Controllers
 {
     public class HomeController : Controller
     {
-        private SqlConnection con;
-        private iTunesManagerDbContext dbContext;
         public ActionResult Index()
         {
             List<RecentAccessModel> recentAccessItems = new List<RecentAccessModel>();
@@ -36,24 +29,23 @@ namespace iTunesManager.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
 
         public ActionResult Search(string term)
         {
+            List<SearchResultModel> searchResultsList = CacheController.RetrieveFromCache(term);
+            if(String.IsNullOrEmpty(term))
+                return View(searchResultsList);
             try
             {
                 ViewBag.value = term;
-                List<SearchResultModel> searchResultsList = CacheController.RetrieveFromCache(term);
+                
 
                 if (searchResultsList == null)
                 {
@@ -107,6 +99,7 @@ namespace iTunesManager.Controllers
 
         public ActionResult ClickCounts()
         {
+            // query the ClickCountModels table and retrieve the artists and the number of times they have been clicked
             List<ClickCountModel> clickCounts = new List<ClickCountModel>();
             using (var dbContext = new iTunesManagerDbContext())
             {
@@ -147,53 +140,5 @@ namespace iTunesManager.Controllers
                 await dbContext.SaveChangesAsync();
             }
         }
-
-
-        // Using cache for click count
-
-        //public ActionResult ViewClickCounts()
-        //{
-        //    var artistCounts = CacheController.GetArtistClickCounts();
-
-        //    // Get the top 10 most accessed artists
-        //    var topArtists = artistCounts.OrderByDescending(x => x.Value)
-        //                                 .Take(10)
-        //                                 .ToList();
-
-        //    // Create a list of models to display in the view
-        //    var modelList = new List<ArtistCountModel>();
-        //    foreach (var artist in topArtists)
-        //    {
-        //        modelList.Add(new ArtistCountModel { ArtistId = artist.Key, ClickCount = artist.Value });
-        //    }
-
-        //    return View(modelList);
-        //}
-
-
-        //[HttpPost]
-        //public void UpdateClickCount(int trackId)
-        //{
-        //    try
-        //    {
-        //        // Retrieve data from cache
-        //        string term = ViewBag.value;
-        //        List<SearchResultModel> searchResultsList = CacheController.RetrieveFromCache(term);
-
-        //        // Find the result item with the matching track ID and increment the click count
-        //        var result = searchResultsList.FirstOrDefault(r => r.TrackId == trackId);
-        //        if (result != null)
-        //        {
-        //            result.ClickCount++;
-        //        }
-
-        //        // Update cache with the new data
-        //        CacheController.InsertIntoCache(searchResultsList, term);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
     }
 }

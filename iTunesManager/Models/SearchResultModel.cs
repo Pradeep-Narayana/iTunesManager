@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace iTunesManager.Models
+﻿namespace iTunesManager.Models
 {
     public class SearchResultModel
     {

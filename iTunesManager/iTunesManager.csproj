@@ -172,7 +172,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationDbContext.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -230,9 +229,7 @@
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\ClickCounts.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Cache\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
